@@ -1,0 +1,24 @@
+filebeat.inputs:
+  - type: filestream
+    id: node11-app-json
+    enabled: true
+    paths:
+      - /var/log/node11/*.ndjson
+
+    parsers:
+      - ndjson:
+          target: ""
+          expand_keys: true
+          overwrite_keys: true
+          add_error_key: true
+
+setup.ilm.enabled: false
+
+setup.template.name: "node11-logs"
+setup.template.pattern: "node11-logs-*"
+
+output.elasticsearch:
+  hosts:
+    - "http://elasticsearch:9200"
+
+  index: "node11-logs-%{+yyyy.MM.dd}"
